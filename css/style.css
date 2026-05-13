@@ -1,0 +1,24 @@
+
+.rainbow-title {
+	background: linear-gradient(
+		90deg,
+		#ff4d4d,
+		#ffa64d,
+		#ffff4d,
+		#4dff4d,
+		#4dd2ff,
+		#4d4dff,
+		#b84dff,
+		#ff4d4d
+	);
+	background-size: 300% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	animation: rainbow-shift 6s linear infinite;
+}
+
+@keyframes rainbow-shift {
+	0% { background-position: 0% 50%; }
+	100% { background-position: 100% 50%; }
+}
