@@ -14,35 +14,23 @@ Plan maestro de 9 tasks con código verificado, ejemplos del PDF y tests inline:
 | 1 | HTML shell + CDN tags + layout tabs/inputs/results | ✅ | `index.html` |
 | 2 | CSS dark/neon preservando `.rainbow-title` | ✅ | `css/style.css` |
 | 3 | `calc.js` — buildDiffTable, forwardDerivativeAtX0, relativeErrorPct | ✅ | `js/calc.js` |
-| 4 Step 1 | `expr.js` — parseExpr (math.js), buildPointsFromFunction | ✅ | `js/expr.js` |
-| **4 Step 2** | **Verificación inline en consola del browser** | ⏳ **PRÓXIMO** | — |
-| 4 Step 3 | Commit final de Task 4 | ⏳ | — |
-| 5 | `ui.js` — DOM helpers, tabs, validación, render tabla/KaTeX, ejemplos precargables | ⏳ | `js/ui.js` |
-| 6 | `plot.js` — Chart.js curva + scatter de puntos + tangente | ⏳ | `js/plot.js` |
-| 7 | `main.js` — wiring de listeners + función `calculate()` | ⏳ | `js/main.js` |
-| 8 | Borrar `js/index.js` (vacío, ya no se usa) | ⏳ | — |
+| 4 | `expr.js` — parseExpr (math.js), buildPointsFromFunction + verif. consola | ✅ | `js/expr.js` |
+| 5 | `ui.js` — DOM helpers, tabs, validación, render tabla/KaTeX, ejemplos precargables | ✅ | `js/ui.js` |
+| **6** | **`main.js` wiring + borrar `js/index.js` + verif. Problemas 4/5 (sin chart)** | ⏳ **PRÓXIMO** | `js/main.js` |
+| 7 | `plot.js` — Chart.js curva + scatter de puntos + tangente | ⏳ | `js/plot.js` |
+| 8 | Pulido CSS (animaciones, responsive, scrollbar) | ⏳ | `css/style.css` |
 | 9 | Verificación end-to-end con los dos ejemplos del PDF | ⏳ | — |
 
 ## Cómo retomar tras `/clear`
 
 1. Abrir este `PROGRESS.md` para ubicarse y luego el plan grande (link arriba).
-2. **Ejecutar Task 4 Step 2** — abrir `index.html` en el browser, abrir consola DevTools y pegar:
-
-   ```js
-   import('./js/expr.js').then(m => {
-     const r = m.buildPointsFromFunction('exp(x) + x', 0.5, 0.01, 5);
-     console.log('xs (esperado [0.5, 0.51, 0.52, 0.53, 0.54]):', r.xs);
-     console.log('ys[0] (esperado ≈ 2.148721):', r.ys[0]);
-     console.log("derivEval(0.5) (esperado {value≈2.6487, method:'symbolic'}):", r.expr.derivEval(0.5));
-   });
-   ```
-
-3. Si todo da OK → confirmar y avanzar a **Task 4 Step 3** (commit) y luego **Task 5** (`ui.js`).
+2. **Ejecutar Task 6** — borrar `js/index.js`, crear `js/main.js` y verificar Problemas 4 y 5 en el browser (sin chart todavía). Pasos detallados en plan §Task 6.
 
 ## Verificaciones ya pasadas
 
 - **Task 3** — `forwardDerivativeAtX0` con ejemplo del PDF dio φ'(0) ≈ 140.0417 ✅
 - **Task 4 Step 1** — `parseExpr` parsea expresiones con math.js, deriva simbólicamente con fallback numérico ✅
+- **Task 4 Step 2** — Verificación en consola: `xs=[0.5,0.51,0.52,0.53,0.54]`, `ys[0]=2.148721270700128`, `derivEval(0.5)={value:2.648721270700128, method:'symbolic'}` ✅
 
 ## Convenciones del proyecto
 
