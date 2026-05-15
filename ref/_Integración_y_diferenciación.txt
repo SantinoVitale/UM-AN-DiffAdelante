@@ -1,0 +1,463 @@
+
+--- PAGE 1 ---
+INTEGRACIÓN Y DIFERENCIACIÓN NUMERICAANÁLISIS NUMÉRICO
+--- PAGE 2 ---
+¿En esta unidad qué vamos a tratar?1.- Uno de los temas a abordar es el de resolver una integral numérica apartir de un conjunto finito de puntos.Ya sea porque la función a integrar es muy complicada o porquesolamente se conoce un conjunto de datos experimentalmente obtenidos yse desea obtener un área.En cualquier caso se trabaja con la función discreta o discretizada, esdecir generando un conjunto de puntos entre dos valores determinados.
+0 0.5 1 1.50.2
+0.4
+0.6
+0.8
+1
+0.905
+0.247
+f x( )
+1.40.1 x
+Este esquema representa de manera muy simple la situación
+--- PAGE 3 ---
+¿En esta unidad qué vamos a tratar?2.- Luego vamos a abordar es problema de calcular la derivada de unafunción en un punto, también cuando se conoce un conjunto de datos o sediscretiza una función.3.- Finalmente vamos a tratar de encontrar la solución particular a unaecuación diferencial a partir de fórmulas iterativas generando una funcióndiscreta. Por lo cual el resultado es un conjunto de puntos.
+Este también es un esquema que representa la solución particular de una EDO
+--- PAGE 4 ---
+Integración NuméricaVamos a partir de trabajar en forma general la integraciónnumérica y luego focalizaremos en fórmulas estandarizadas.
+
+b
+a
+dxxf )(Problema a resolverf es una función integrable en [a, b] y la vamos adiscretizar o bien, conocemos solamente un conjunto depuntos los cuales se consideran parte de una funcióncontinua, por lo tanto integrable.
+--- PAGE 5 ---
+Antes de abordar este tema revisemos un poco interpolación.Interpolar es un modo de aproximar un conjunto de puntos a un polinomio quelos represente, con la condición de que dicho polinomio debe pasarexactamente por todos los puntos dados.El polinomio que se obtiene para n+1 puntos es de grado n y en la unidadcorrespondiente van a desarrollar diversos métodos, los cuales llevarán aobtener eseúnicopolinomio que pasa por los n+1 puntos.௜௜଴௡0510152025300 1 2 3 4
+--- PAGE 6 ---
+Como todo método numérico, obtener una aproximación porinterpolación implica obtener el polinomio interpolante yrespecto al método utilizado, un error de interpolación.௜௜଴௡Para obtener ese polinomio interpolante, verán métodos tales como:Lagrange, Newton diferencias no divididas y diferencias divididas.Lo importante, es tener en claro que ese polinomio interpolante, que pasapor los puntos dados, es único, cualquiera sea el método que se utilicepara determinarlo.
+--- PAGE 7 ---
+f (x) = Pn(x) + (x)Siempre podríamos calcular la función que interpola al conjunto de puntos tal que:Se tiene un conjunto de puntos (x i, y i)     i = 1, … , n  x i[a, b]Siendo:      Pn(x)el polinomio interpolante (x)el error de interpolaciónEntonces si integramos:
+Integral aproximadaError de aproximación
+--- PAGE 8 ---
+Si:      Pn(x)es el polinomio interpolante de Lagrange
+Donde los Lison coeficientes a determinar.
+A los coeficientes Lilos denominamos Ai
+Integral aproximada
+Trabajamos sólo con el primer término, reemplazamos dejando en suspenso el error
+--- PAGE 9 ---
+Determinación de los coeficientes A if se supone una función que pertenece a C[a, b] S subespacio de dimensión finita de C[a, b]y B = (φ0, φ1,…, φn) es una base    de él
+Se la suele denominar formula general o fórmula de la cuadratura paracalcular la integral aproximada, estamos dejando el error para después.Pero no conocemos los coeficientes Ai, veamos como obtenerlos.
+
+--- PAGE 10 ---
+Por el método general o de la cuadratura para cada función de la base:
+)()(
+0
+ij
+n
+i
+i
+b
+a
+j xAdxx   
+
+Con lo cual queda determinado un sistema de ecuaciones linealesResolverlo   hallar los coeficientes A i
+(j = 0,….,n) ௝଴௝଴ଵ௝ଵ௡௝௡௕௔ (j = 0,….,n) Puedo expresar como igualdad porque trabajaremos con funciones conocidas, para las cuales siempre es factible calcular la integral definida.
+--- PAGE 11 ---
+Consideremos la función:f(x) = sen (x) en [0, 1] y tres puntos paradiscretizarla଴ଵଶpara calcular la integral aproximadapor el método de la cuadratura.଴଴ଵଵଶଶଵ଴Veamos un ejemplo:
+Necesitamos definir una base con tantos elementos como puntos atrabajar (en este caso tres) para armar el sistema de ecuaciones y luegodeterminar los coeficientes Ai que permitan calcular la integralaproximada.
+--- PAGE 12 ---
+ଶ଴ଵଶଵ଴଴ଵଶଵ଴଴ଵଶଵ଴Reemplazamos por los valores correspondientes଴ଵଶ଴ଵଶ଴ଵଶResolvemos el sistema
+଴ଵଶArmamos el SEL௝଴௝଴ଵ௝ଵ௡௝௡௕௔
+--- PAGE 13 ---
+0
+1
+xf x( ) d 0.459697694
+1/6 A02/3 A11/6 A2Entonces:଴଴ଵଵଶଶଵ଴ଵ଴ReemplazamosCalculamos f(x)0,479425540,84147098ଵ଴𝐼≅න𝑠𝑒𝑛𝑥 𝑑𝑥=0,459862190ଵ଴Por cálculo directo:Conclusión?
+Resolvemos el sistema
+--- PAGE 14 ---
+Para cada conjunto de puntos dado o para cada funciónque se discretice, es posible hallar una fórmula de lacuadratura asociada y se podrá calcular la integralaproximada.En este curso nos interesa trabajar con métodos deintegración numérica estandarizados, determinaremoslos coeficientes Ai, vamos a poder generalizar lasfórmulas y utilizarlas siempre que estén dadas lascondiciones iniciales.¿Cuáles son esas condiciones?Que los puntos se encuentren a la misma distancia, esoes siempre factible.
+--- PAGE 15 ---
+Métodos de Newton-Cotes
+Imagen extraída del texto de Chapra-CanaleEstas dos figuras representan las fórmulas de integración cerrada y abierta, en las cerradas (a) seconocen todos los valores funcionales de la región en la cual se calcula la integral, las abiertas (b) seextienden más allá de los datos conocidos.
+Las fórmulas obtenidas por Newton Cotes para integración numéricapueden ser abiertas o cerradas, nosotros en este curso solamenteestudiaremos las cerradas.
+--- PAGE 16 ---
+Fórmula del TrapecioConsideraremos que  n = 1:Es decir se conocen x0, x1tales que x1–x0= hTomamos una base polinomial con tantos elementos como lospuntos dados:B= (φ0, φ1) con φ0(x) =1, φ1(x)=xRetomamos la expresión que vimos antes porque vamos agenerar el sistema de ecuaciones para determinar losAi
+)()(
+0
+ij
+n
+i
+i
+b
+a
+j xAdxx   
+
+--- PAGE 17 ---
+Calculamos el lado izquierdo de la igualdad:Calculamos el lado derecho de la igualdad:
+଴଴଴଴ଵ଴ଵ௫భ௫బଵ଴ଵ଴ଵ௫ଵ௫భ௫బ
+--- PAGE 18 ---
+
+
+
+
+
+)(2 011100
+01
+xxhxAxA
+hAA
+Ordenamos el SEL de orden dos:Resolvemos:
+(-x0F1 + F2)
+
+--- PAGE 19 ---
+Solución:     A0= h/2    y A1= h/2 Reemplazamos y despejamos:
+Entonces:Formula del Trapecio para dos puntos
+--- PAGE 20 ---
+Problema 1. Considere la integral:𝟐𝟏a) Calcule la integral aproximada por la regla del Trapecio en dospuntos, determine el error del método. (Trabaje con 6 decimalescomo mínimo)b) Resuelva con calculadora, determine el error absoluto entre el valorsupuestamente exacto y el aproximado y elabore una conclusión.
+Apliquemos lo visto trabajando con el práctico!!!
+--- PAGE 21 ---
+Lo primero que debemos hacer es discretizar la función, es decirgenerar el conjunto de puntos con los datos dados.f(x) = x.ln (x) [x0, x1] = [1, 2] h = 1Aplicamos el método para calcular la integral aproximada en dos puntos:x 1 2f(x) 0 1,38629436
+𝟐𝟏 0,69314718Enseguida calculamos el error!!
+--- PAGE 22 ---
+Desarrollemos una expresión para el error del método
+Habíamos dicho anteriormente que si trabajamos con la funcióninterpolante sucede esto, se desdobla la integral entre el polinomiode interpolación y el error de interpolación.Integral aproximadaError de aproximaciónLa primera parte de la integral aproximada ya la trabajamos en la fórmula delTrapecio, ahora trabajemos con la segunda parte.Error de interpolación))...()().(()!1( 10
+1
+n
+n
+xxxxxxn
+f 
+
+
+
+--- PAGE 23 ---
+Entonces:ConstanteEn el caso de la fórmula del Trapecio teníamos dos puntos x0y x1
+௫೙௫బ௫೙௫బ
+))...()().(()!1( 10
+1
+n
+n
+xxxxxxn
+f 
+
+
+଴௡ᇱᇱ଴ଵ௫భ௫బ
+--- PAGE 24 ---
+Trabajando algebraicamente resulta:
+Esta sería la expresión del error para trabajar con dos puntos la fórmula del trapecio.(El desarrollo esta en el apunte!!)
+--- PAGE 25 ---
+Retomamos el problema 1:𝟐𝟏0,69314718Calculamos el error en este caso, para lo cual necesitamos la derivada segunda en los dos puntos:ᇱᇱx 1 2f''(x) 1 0,5
+ଷTomamos el valor máximo de la derivada en valor absoluto
+1
+2
+xx ln x( ) d 0.63629436
+Por calculadora:−0,05685282Error absolutoConclusión?
+--- PAGE 26 ---
+Del mismo modo que procedimos para desarrollar la Fórmula deTrapecio, lo vamos a hacer para desarrollar la Fórmula deSimpson, pero esta vez trabajamos con tres puntos.
+Imagen extraída del texto de Chapra-CanaleEstas imágenes ilustran la diferencia entre utilizar Fórmula de Trapecio y deSimpson, esta última conecta los puntos con una parábola, lo que suaviza el errorde aproximación.
+--- PAGE 27 ---
+Fórmula de SimpsonConsideraremos que  n = 2:Es decir se conocen x0, x1, x2tales que x1–x0= x2–x1= hTomamos una base polinomial con tantos elementos como lospuntos dados:B= (φ0, φ1, φ2) con φ0(x) =1, φ1(x)=x , φ2(x)=x2Procedemos del mismo modo que lo hicimos con la Trapecio, esdecir armamos el sistema de ecuaciones que permita determinar loscoeficientesAi
+--- PAGE 28 ---
+)()(
+2
+0
+2
+0
+ij
+i
+i
+x
+x
+j xAdxx   
+ j = 0, 1, 2φ0(x) =1, φ1(x)=x , φ2(x)=x2
+Resolver este sistema significa hallar los coeficientes Ai
+--- PAGE 29 ---
+Calculamos las tres integrales y armamos el sistema:
+Resolviendo el sistema resulta:A0= h/3    y  A1= 4h/3 y A2= h/3 
+
+
+
+
+
+
+
+
+)(3
+2
+)(2
+2
+2
+0202222
+212
+102
+0
+02221100
+201
+xxxxhxAxAxA
+xxhxAxAxA
+hAAA
+ଶ଴
+--- PAGE 30 ---
+En la ecuación general:Reemplazamos por los coeficientes obtenidos y resulta:
+Sacando factor común obtenemos la fórmula de Simpson para tres puntos.
+--- PAGE 31 ---
+Problema 1. Considere la integral:c) Calcule la integral dada por Simpson con tres puntos. Determine elerror del método.Considere el cálculo directo y concluya respecto a las aproximacionesobtenidas por ambos métodos a través del calculo del error absoluto.
+Apliquemos lo visto trabajando con el práctico!!!𝟐𝟏
+--- PAGE 32 ---
+𝟐𝟏Lo primero que debemos hacer es discretizar la función, es decir generar elconjunto de puntos con los datos dados.f(x) = x.ln (x) [x0, xn] = [1, 2] h = 0,5Aplicamos el método para calcular la integral aproximada en tres puntos:x 1 1,5 2f(x) 0 0,60819766 1,38629436
+න𝒙. 𝐥𝐧𝒙 𝒅𝒙 ≅𝟎, 𝟓𝟑𝟎 + 𝟒. 𝟎, 𝟔𝟎𝟖𝟏𝟗𝟔𝟔 + 𝟏, 𝟑𝟖𝟔𝟐𝟗𝟒𝟑𝟔 =𝟐𝟏
+--- PAGE 33 ---
+El error del método de Simpson requiere de una demostración diferente a lo realizado en Trapecio, por lo cual solamente consideraremos la ecuación correspondiente a tres puntos sin realizar la demostración:ହூ௏଴ଶAplicamos al ejercicio visto, para lo cual necesitamos el valor de la derivadacuarta para los tres puntos involucrados:ூ௏ିଷx 1 1,5 2fIV(x) 2 0,59259259 0,25ହூ௏−6,9410 −4Reemplazamos por el máximo en valor absoluto
+--- PAGE 34 ---
+Por Regla del Trapecio en 2 puntos:𝟐𝟏0,69314718
+1
+2
+xx ln x( ) d 0.63629436
+Por calculadora:𝟐𝟏Por Regla del Simpson en 3 puntos:Conclusión?Calculamos errores absolutos
+--- PAGE 35 ---
+Ahora bien, lo frecuente no es trabajar con dos o trespuntos, por eso vamos ahora a generalizar la fórmula delTrapecio y la del Simpson a n puntos.Lo mismo vamos a hacer con el error, vamos a generalizarla fórmula correspondiente.଴ଵ௫భ௫బଷᇱᇱ଴ଵPartimos por Regla del Trapecio
+--- PAGE 36 ---
+Aplicamos la fórmula desde x0hasta xn dejamos al error pendiente
+
+--- PAGE 37 ---
+Entonces:[x0, xn]  subdivide en n intervalos  [x0,x1], [x1,x2],….,  [xn-1,xn] Se aplica la fórmula para cada uno de ellos y trabajando un poco algebraicamente resulta:Es la fórmula del Trapecio que permite calcular la integral numérica aproximada (área) de una función discretizada o bien de un conjunto de puntos dados, nos queda aun evaluar el error del método que lo vinimos dejando pendiente.
+2
+--- PAGE 38 ---
+Generalizamos la ecuación del error:
+Error del método del Trapecio
+ଷᇱᇱ଴ଵConsideramos n subintervalos entre ଴y  ௡Mientras más pequeño es el valor de h se espera obtener una mejor aproximación
+--- PAGE 39 ---
+Otro modo de expresar el error
+Considerando que los límites de integración son [a, b] y n el número de subintervalos en los cuales se subdivide.
+Muchos autores prefieren esta expresión para el error y suelen  considerar el promedio de la derivada segunda en lugar del máximo de la misma.
+
+--- PAGE 40 ---
+FÓRMULA GENERALIZADA DEL TRAPECIO
+Trabajemos con ella en el práctico!!
+Error del métodoIntegral aproximada2
+--- PAGE 41 ---
+Problema 2. Dada la integral:a) Calcule el valor aproximado utilizando regla del Trapecio con n = 8 subintervalos.Hay que discretizar la función, para lo cual necesitamos el valor de hAhora hay que generar el conjunto de puntosxo x1 x2 x3 x4 x5 x6 x7 x8x 0 0,125 0,25 0,375 0,5 0,625 0,75 0,875 1y 0 0,052288 0,088889 0,114833 0,133333 0,146520 0,155844 0,162319 0,166667𝑓𝑥=𝑥𝑥+ 1 (𝑥+ 2)
+--- PAGE 42 ---
+Aplicamos la fórmula del Trapecio௜଻௜ୀଵଵ଴ଵ଴0,11716985
+xo x1 x2 x3 x4 x5 x6 x7 x8x 0 0,125 0,25 0,375 0,5 0,625 0,75 0,875 1y 0 0,052288 0,088889 0,114833 0,133333 0,146520 0,155844 0,162319 0,166667
+--- PAGE 43 ---
+Vamos a generalizar la fórmula del Simpson a n puntos delmismo modo que lo hicimos con Trapecio, tambiéngeneralizaremos el error del método.଴ଵଶ௫మ௫బହூ௏଴ଶRegla de Simpson
+--- PAGE 44 ---
+(1)(2)
+Analicemos desde una gráfica
+Vemos que donde finaliza el primer intervalo, comienza el otro, por eso …
+
+--- PAGE 45 ---
+Fórmula generalizada de Simpson de 1/3 para n puntos:En esta fórmula lo que plantea Newton-Cotes es suavizar el error a partir deconectar los puntos por polinomios de orden superior a uno.
+h             hEsta gráfica no es más que un esquema!!
+--- PAGE 46 ---
+Error del método para la Fórmula de SimpsonSe puede demostrar que el error estimado para la regla de Simpsonde 1/3 generalizada, de aplicación múltiple, que es la que acabamosde trabajar, es la siguiente expresión:
+Entonces la Fórmula generalizada de Simpson 1/3  para n puntos es la siguiente:
+i = 0 i = 1
+--- PAGE 47 ---
+Otro modo de expresar el error
+Considerando que los límites de integración son [a, b] y n el número de subintervalos en los cuales se subdivide.
+En la Fórmula de Simpson también, muchos autores prefieren esta expresión para el error y suelen  considerar el promedio de la derivada segunda en lugar del máximo de la misma.
+Sustituyendo resulta:
+--- PAGE 48 ---
+FÓRMULA GENERALIZADA DE SIMPSON
+Trabajemos con ella!!
+En la sumatoria si es desde i = 0 es 2i+1, si es de i = 1 es 2i-1
+--- PAGE 49 ---
+Problema 2.b) Resuelva la integral aproximada por Simpson con los mismos 8subintervalos indicados en el punto anterior.c) Resuelva con calculadora y compare los tres resultados obtenidoselaborando una conclusión. Trabaje con un mínimo de 5 decimales.Apliquemos lo visto trabajando con el práctico!!!
+ଵ଴
+--- PAGE 50 ---
+Ya habíamos discretizado la función, para lo cual calculamos el valor de h y generamos la tabla de valores.Ahora hay aplicar la regla de Simpson 1/3 para calcular la integral aproximadaxo x1 x2 x3 x4 x5 x6 x7 x8x 0 0,125 0,25 0,375 0,5 0,625 0,75 0,875 1y 0 0,052288 0,088889 0,114833 0,133333 0,146520 0,155844 0,162319 0,166667*            ° *            ° *           ° *ଵ଴ ௫௫ାଵ(௫ାଶ)ଵ଴
+--- PAGE 51 ---
+ଵ଴0,11716985
+Por Trapecio n puntos:Por Calculadora:௫௫ାଵ(௫ାଶ)ଵ଴Por Simpson n puntos:
+Conclusión?Errores absolutos
+--- PAGE 52 ---
+Queda la resolución de los problemas 3 del práctico de esta parte de la unidad, integración numérica, después compartimos los resultados!!
+
+--- PAGE 53 ---
+Diferenciación NuméricaProblema a resolverCalcular:   f n(xk)Dispone:  (xi, yi)    i = 0,1,… , n
+(xi, yi) son parte de f C [a, b]f es una función derivable en [a, b]Al igual que en el tema anterior podemos disponer de un conjuntode puntos obtenidos experimentalmente o bien, de discretizar unafunción determinada.
+--- PAGE 54 ---
+MÉTODOSDiferencias centradasDiferencias hacia adelantePara resolver el problema
+La elección de uno o de otro de estos métodos, dependeráde cuál es la ubicación del punto en el cual busco la derivadanumérica.
+--- PAGE 55 ---
+Como dijimos anteriormente, Interpolación es un procedimiento de aproximaciónde un conjunto de n puntos con un polinomio de grado n-1, ese polinomiocumple con la condición de que es único y debe pasar exactamente por todoslos puntos dados.Esto significa, que si los puntos son pares ordenados (x, f(x)) o (x, y) y la funcióninterpolante la denominamos(x) entonces:f (xi)  =    (xi)f (x)   =    (x)  +  (x)Función de interpolaciónError de interpolación
+Diferencias hacia adelante
+--- PAGE 56 ---
+Un modo de encontrar ese polinomio interpolante es a través de“diferencias”, las siguientes expresiones muestran algunas de esasdiferencias, las cuales, son números reales, es decir sonconstantes en el momento de derivar, al igual que el número real hque es la distancia entre dos puntos௜௜ିଵ:଴ଵ଴ଶ଴ଶଵ଴ଶଵଵ଴ଵଶଵY así sucesivamente …
+--- PAGE 57 ---
+Diferencias hacia adelanteAhora bien, se dispone de un conjunto de puntos (xi, yi)que se suponen parte de una función continua, fC[a, b]y por lo tanto derivable.Consideramos que es la función de interpolación de f:f (xi)  =    (xi)( xi[a, b]    y     xi+1– xi= h )f (x)   =    (x)  +  (x)Necesitamos que todos los puntos estén a la misma distancia, eso siempre es posible …
+--- PAGE 58 ---
+Derivar a (x) respecto de x:´ (x) Aplicar la derivada en el punto x0 :  ´ (x0)Teniendo en cuenta que   xi - x0=  i . H (todos los puntos a la misma distancia!!!)El desarrollo para llegar a la fórmula correspondiente requiere querealicemos los siguientes pasos, luego trabajaremos para determinar el errordel método.
+Considerando que buscamos la derivada de la función, resulta que:Si  f (x)   =    (x)  +  (x)Entonces:   f’ (x)   =    ’ (x)  +  ’ (x)Derivada aproximadaError del método
+--- PAGE 59 ---
+Consideramos al polinomio de interpolación de Newtondiferencias no divididas:
+Derivamos este polinomio:బమబమ)()+ … )() )
+--- PAGE 60 ---
+బమబమ)()+ … )() )
+--- PAGE 61 ---
+Aplicamos la derivada a x0
+Se anulaSe anulan
+଴
+--- PAGE 62 ---
+Descartando los términos nulos resulta entonces:-h                                         -h       …       -(n-1)h  
+h
+1
+
+
+   )(1)1(...)(3
+1)(2
+1)( 0
+1
+0
+3
+0
+2
+0 xfnxfxfxf nn
+´(x0)  =  Fórmula en diferencias hacia adelante para calcular la derivada de una función en un punto x0.
+
+--- PAGE 63 ---
+Error del método de  “Diferencias hacia adelante”Habíamos iniciado el desarrollo con esta expresiónSi  f (x)   =    (x)  +  (x)Entonces:   f’ (x)   =    ’ (x)  +  ’ (x)Derivada aproximadaError del métodoYa desarrollamos la fórmula para la derivada aproximada, ahora trabajamoscon el error del método, partiendo del error de interpolación:(x)=  (x – x0) (x – x1) ... (x – xn)                   siendo  (x0, xn))!1(
+)(1
+
+
+n
+f n 
+--- PAGE 64 ---
+El procedimiento es similar, primero derivamos la expresión delerror respecto de x , luego aplicamos a x0
+ (x0, xn)´(x0) =  (-1)nhn
+)1(
+)(1
+
+
+n
+f n 
+(x)=  (x – x0) (x – x1) ... (x – xn)                   siendo  (x0, xn))!1(
+)(1
+
+
+n
+f n 
+Se anulan al aplicar en xoCada uno es –i.h al aplicar enxo, sería n con signo veces hError del método de diferencias hacia adelante.
+--- PAGE 65 ---
+Problema 4. Se mide la velocidad (m/s) del aire que fluye sobreuna superficie plana a distintas distancias y (m) de la superficie,determine el esfuerzo contante(N/m2) en la superficie paray = 0, si se sabe que:Suponga un valor de viscosidad dinámico= 1,8.10-5N.s/m2Los datos obtenidos experimentalmente se muestran acontinuación:
+Trabajamos con el práctico:
+y (m) 0 0,002 0,006 0,012 0,018 0,024v (m/s) 0 0,287 0,899 1,915 3,048 4,299
+--- PAGE 66 ---
+Un dato que necesito para aplicar la fórmula es h, distancia entre los puntos, la cual debe ser constante.Buscamos la derivada primera en y = 0ᇱ଴଴ଶ଴ଷ଴ସ଴y (m) 0 0,002 0,006 0,012 0,018 0,024v (m/s) 0 0,287 0,899 1,915 3,048 4,299Hay un punto que debemos descartar y construir la tabla de diferencias.
+--- PAGE 67 ---
+y (m) v (m/s)f(x)2f(x)3f(x)4f(x)0 00,006 0,899 0,8990,012 1,915 1,016 0,1170,018 3,048 1,133 0,117 00,024 4,299 1,251 0,118 0,001 0,001Calculamos las diferencias en una tabla:
+Aplicamos la ecuación correspondiente:଴଴ଶ଴ଷ଴ସ଴140,041667
+x0x1x2x3x4x              f(x)
+--- PAGE 68 ---
+Calculamos el esfuerzo:= 1,8.10-5N.s/m2Entonces reemplazamos:1,8.10−5140,041667140,041667 s
+= 2,52.ିଷଶEs muy importante verificar que los puntos estén a igual distancia!!!
+--- PAGE 69 ---
+Fórmula en diferencias hacia adelante para calcular derivadas de orden superiorEl procedimiento sería similar al realizado.Debemos considerar la derivada primera del polinomio de interpolación yvolver a derivarlo tantas veces como se requiera, para luego aplicarlo enel punto xo.
+
+--- PAGE 70 ---
+Diferencias centradasPOR TAYLORxi+1– xi= hf (x) = f (x0) +  h               h2h3                           ... + hn !1
+)´( 0xf !2
+)( 0xf II
+!3
+)( 0xf III
+!
+)( 0
+n
+xf n
+Siempre sería posible truncar la serie y obtener fórmulas a partir de Taylor paracalculo de derivadas en un punto.Como se busca un mayor nivel de precisión es posible a partir de la fórmula deTaylor obtener las fórmulas en diferencias finitas centradas, vemos cómo seríael desarrollo analítico.
+--- PAGE 71 ---
+Partiendo de la fórmula de Taylor que acabamos de recordar y
+teniendo en cuenta que   xk - x0=  k . hReemplazamos a k por los valores 1 y -1
+Restamos m. a m. ambas expresiones:
+--- PAGE 72 ---
+Restando m. a m. ambas expresiones y truncando la serie:Despejamos la derivada primera:
+Derivada aproximadaError Fórmula de diferencias finitas centradas para la derivada primera en dos puntos
+--- PAGE 73 ---
+Sumando m. a m. ambas expresiones y truncando la serie:Despejamos la derivada segunda:
+Derivada segunda aproximadaFórmula de diferencias finitas centradas para la derivada segundaen dos puntos
+--- PAGE 74 ---
+Del mismo modo se pueden realizar combinaciones lineales conla fórmula de Taylor para obtener otras fórmulas de diferenciasfinitas centradas con más cantidad de puntos, al extender laexpresión de Taylor a más puntos se consideran con mayor nivelde precisión, vemos algunas a modo de ejemplo:
+Derivadas primera y segunda en cuatro puntos
+--- PAGE 75 ---
+Problema 5. El objetivo de este problema es comparar lasaproximaciones obtenidas al derivar por diferencias centradas en2 y 4 puntos, diferencias hacia delante y el cálculo analítico parala siguiente función.Trabaje con un valor de h = 0,01 y determine la derivada de lafunción en x = 0,5.Compare los resultados obtenidos a través del error relativoporcentual y concluya al respecto.Vamos a aplicar en primer lugar diferencias centradas.
+Trabajamos con el práctico:
+--- PAGE 76 ---
+ଶ௫h = 0,01      x = 0,5 Generamos una tabla en cuatro puntos, usamos dos y luego los cuatro centrados en x = 0,5.0,48 0,49 0,5 0,51 0,522,131696 2,174456 2,218282 2,263195 2,309217Aplicamos fórmula en dos puntos:ᇱAplicamos fórmula en cuatro puntos:x-2h               x-h                 x                 x+h x+2h
+ᇱ
+xf(x)
+--- PAGE 77 ---
+Aplicamos ahora la fórmula de diferencias hacia adelante:x f(x)f(x)2f(x)3f(x)4f(x)0,5 2,2182820,51 2,263195 0,04491290,52 2,309217 0,0460223 0,00110930,53 2,356371 0,0471540 0,0011317 0,00002240,54 2,404680 0,0483086 0,0011546 0,0000229 0,0000005Generamos la tabla de diferencias:Aplicamos la fórmula:ᇱ଴଴ଶ଴ଷ଴ସ଴x0x1x2x3x4ଶ௫h = 0,01      x = 0,5 
+--- PAGE 78 ---
+Fórmula en dos puntos:ᇱFórmula en cuatro puntos:ᇱDiferencias hacia adelante:ᇱCálculo directo:ᇱErrores relativos porcentuales:E% (2ptos) = -0,00816949 %E% (4ptos) = 6,53578E-07 %E%(Adel)=4,05445E-06 %Conclusión?ଶ௫
+--- PAGE 79 ---
+Queda la resolución de los problemas 6 y 7 del práctico de esta parte de diferenciación, después compartimos los resultados!!
+
+--- PAGE 80 ---
+Ecuaciones diferencialesUna ecuación diferencial de orden n:  F (X, Y, Y’, Y’’,… Yn) = 0Admite como solución general una función:   G (X, Y, C1, C2, … , Cn) = 0Con n constantes arbitrarias.Una solución particular es aquella solución general en la cual reciben valores específicos a las constantes
+Revisemos algunos conceptos
+--- PAGE 81 ---
+La solución general de una ecuación diferencial ordinaria representa una familia de curvas planas para valores particulares de las constantes CiCada una de estas curvas es una solución particular a la ecuación diferencial, sujeta a n condiciones independientes.
+Imagen extraída del texto de Chapra-Canale
+--- PAGE 82 ---
+Según como se establecen esas condiciones independientes 
+P.V.I.P.V.F.
+Las condiciones se definen respectoa un valor inicial:x = ay (a) = y0 Las condiciones se definen respectoa los valores comprendidos entre:x = a     e      y = b
+--- PAGE 83 ---
+Métodos numéricos trabajan discretizando la función
+P.V.I.Analizaremos métodos quepermitan hallar una soluciónparticular aproximada paracuando x toma los valores dexi.Lo que obtendremos será esasolución particular discreta, esdecir un conjunto de puntos.
+--- PAGE 84 ---
+En este curso vamos a estudiar métodos numéricos para hallaruna solución particular a una EDO cuando las condicionesindican un problema de valores iniciales PVI.
+En términos generales las fórmulas que abordaremos mantienen el siguienteformato, van a diferir en la manera en que se estime la pendiente, la pendienteestimada se utilizará para extrapolar desde un valor yia un valor posterior yi+1a una distancia h.
+Analizaremos dos métodos:  Método de Euler y Método de Runge Kutta
+--- PAGE 85 ---
+Método de Euler
+En el método de EulerPor lo tanto:Permite hallar la solución particular para los valores de xi+1conociendo el valor anterior xi.Fórmula de Euler
+
+--- PAGE 86 ---
+En este curso no vamos a analizar los errores de este método, los quepodrán revisar en el texto de Chapra-Canale.Pero vamos a interpretar este gráfico que ilustra la necesidad deconsiderar valores de h suficientemente pequeños para lograr unaaproximación más acertada.
+Imagen extraída del texto de Chapra-CanaleUn motivo fundamental de error en el método de Euler es suponer que la derivada alinicio del intervalo es la misma durante todo el intervalo.
+--- PAGE 87 ---
+Trabajamos con el práctico:Problema 8.a) Obtenga usando método de Euler una solución particular a la siguienteecuación diferencial en el intervalo [0, 4] Con h = 1 y con h = 0,5,sabiendo que para x = 0, y = 2଴,଼௫
+Aplicamos:Para organizar los resultados recurriremos a una tabla:
+--- PAGE 88 ---
+଴,଼௫h = 1x y f(x, y) = ଴,଼௫0 21 ଴,଼.଴= 3ଵ଴଴଴x y f(x, y) = ଴,଼௫0 2 31 56,402162 ଴,଼௫భଵ଴,଼௫మଶଶଵଵଵ Así sucesivamente hasta x = 4
+[0, 4] ௜ାଵ௜௜௜
+--- PAGE 89 ---
+଴,଼௫h = 1x y f(x, y)0 2 31 5 6,402162 11,40216 14,111053 25,51321 31,336104 56,8493101020304050600 2 4 6El ejercicio pide realizar el mismo método pero ahora para h = 0,5Obtenemos el conjunto de puntos que representa a la solución particular con las condiciones iniciales y con una distancia h = 1
+[0, 4] 
+--- PAGE 90 ---
+଴,଼௫h = 0,5x y f(x, y)0 2 30,5 3,5 4,217301 5,60865 6,097841,5 8,65757 8,951682 13,13341 13,245422,5 19,75612 19,678163 29,59520 29,295103,5 44,24276 43,657214 66,071360102030405060700 1 2 3 4 5¿Qué opinan?El ejercicio continua, luego lo retomaremos.
+[0, 4] ௜ାଵ௜௜௜
+--- PAGE 91 ---
+Método clásico de Runge Kutta
+En el esquema general:Esta ecuación de recurrencia que analizaremos luego es la querepresenta a los métodos de Runge Kutta, los hay de orden 1(coincidiendo con Euler), de orden 2, …, n, pero vamos a particularizaral de cuarto orden, que ofrece un muy buen nivel de precisión.
+
+--- PAGE 92 ---
+Método de Runge Kutta de cuarto orden:
+Donde los coeficientes kise calculan de la siguiente manera:k1= f (x, y)                     k2= f ( x +          ,   y +       .k1)2
+h
+2
+h
+k3= f ( x +       ,  y +       . k2)               k4= f (x + h, y + h. k3)2
+h
+2
+h
+--- PAGE 93 ---
+Imagen extraída del texto de Chapra-Canale
+Se puede observar en el gráfico las ponderaciones de la pendienteque realiza el método, lo que mejora notablemente el nivel deprecisión.
+--- PAGE 94 ---
+Trabajamos con el práctico:Retomamos el Problema 8.a) Obtenga usando método de Euler una solución particular a lasiguiente ecuación diferencial en el intervalo [0, 4] Con h = 1 y con h =0,5, sabiendo que para x = 0, y = 2଴,଼௫b) Resuelva por Runge Kutta de cuarto orden la ecuación dada en (a)con las mismas condiciones iniciales y para h = 1 y para h = 0,5.Aplicaremos ahora el método de Runge Kutta de cuarto orden
+--- PAGE 95 ---
+଴,଼௫ h = 1También vamos a sistematizar los datos en una tabla, pero iniciaremos el primer paso lentamente para ir analizando el procedimiento.଴଴ଵ ଵ଴,଼௫= 3 Trabajamos con el punto inicial:ସଷଷଶଶଵ h = 1ଶ଴,଼(௫ାభమ)ଵଶଵ= ଷ଴,଼(௫ାభమ)ଵଶଶ= ସ଴,଼(௫ାଵ)= 
+[0, 4] 
+--- PAGE 96 ---
+Cada paso requiere de todos estos cálculos, por eso se sugiere siempre la programación para este método.Veamos que es lo que hemos obtenido al aplicar Runge Kutta de 0 a 4 en una tabla:
+ଵ3 ଶଷସ଴଴ ଵh = 1ଵଵ
+--- PAGE 97 ---
+x y k1 k2 k3 k4 j (x, y)0 2 3 4,21730 3,91297 5,94568 4,201041 6,20104 5,80165 8,72954 7,99756 12,71283 8,661452 14,86248 12,38089 19,02976 17,36754 27,97769 18,858863 33,72135 27,23203 42,10991 38,39044 62,07423 41,717824 75,43917010203040506070800 1 2 3 4 5Obtenemos el conjunto de puntos que representa a la solución particular por Runge Kutta con las condiciones iniciales y con una distancia h = 1El ejercicio pide realizar ahora el cálculo para h = 0,5
+--- PAGE 98 ---
+଴,଼௫ h = 0,5x y k1 k2 k3 k4 j (x, y)0 2 3 3,51061 3,44678 4,10560 3,503400,5 3,75170 4,09145 4,90119 4,79998 5,82632 4,886681 6,19504 5,80464 7,05003 6,89435 8,45936 7,025461,5 9,70777 8,42658 10,31359 10,07772 12,43881 10,274672 14,84511 12,38958 15,22734 14,87262 18,41552 15,167502,5 22,42886 18,34180 22,59290 22,06151 27,36290 22,502253 33,67998 27,25271 33,60837 32,81391 40,73512 33,472073,5 50,41602 40,57058 50,06282 48,87629 60,70304 49,858644 75,34534Indudablemente el número de cálculos que se requieren índica que necesitamos programar para poder aplicar este método.El ejercicio continua …
+--- PAGE 99 ---
+c) Sabiendo que la solución analítica es:ସଵ,ଷ଴,଼௫ି଴,ହ௫ି଴,ହ௫Compare los resultados obtenidos por ambos métodos para losvalores indicados partiendo de las condiciones iniciales. Se sugierecalcular error absoluto.d) Concluya respecto a los méritos de las soluciones numéricasobtenidas y la solución analítica. Represente gráficamente parailustrar la conclusión.Vamos a realizar una tabla con los resultados para la solución analítica para h = 1 y para h = 0,5 y luego continuamos.
+--- PAGE 100 ---
+ସଵ,ଷ଴,଼௫ି଴,ହ௫ି଴,ହ௫x y0 21 6,194632 14,843923 33,677174 75,33896x y0 20,5 3,751521 6,194631,5 9,707042 14,843922,5 22,427013 33,677173,5 50,411774 75,33896h = 0,5h = 1Estos son los valores obtenidos al aplicar la solución analítica de la ecuacióndiferencial.Para comparar resultados vamos a calcular los errores absolutos.El punto (d) nos pide luego concluir respecto a los méritos de las aproximacionesobtenidas.
+--- PAGE 101 ---
+EULER RUNGE KUTTA ANALÍTICOE1   Comp. EulerE2   Comp.     R - Kx y y y0 2 2 21 5 6,20104 6,19463 1,19463 -0,006412 11,40216 14,86248 14,84392 3,44176 -0,018563 25,51321 33,72135 33,67717 8,16396 -0,044184 56,84931 75,43917 75,33896 18,48965 -0,10021h = 1EULER RUNGE KUTTA ANALÍTICOE1   Comp. EulerE2   Comp.     R K0 2 2 20,5 3,5 3,75170 3,75152 0,25152 -0,000181 5,60865 6,19504 6,19463 0,58598 -0,000411,5 8,65757 9,70777 9,70704 1,04947 -0,000732 13,13341 14,84511 14,84392 1,71051 -0,001182,5 19,75612 22,42886 22,42701 2,67089 -0,001843 29,59520 33,67998 33,67717 4,08197 -0,002813,5 44,24276 50,41602 50,41177 6,16902 -0,004254 66,07136 75,34534 75,33896 9,26760 -0,00637h = 0,5Observemos las últimas dos columnas que nos indican los errores absolutos comparando el resultado analítico con los obtenidos por ambos métodos aproximados. 
+Conclusión?
+--- PAGE 102 ---
+010203040506070800 1 2 3 4 5y Eulery R-Ky
+010203040506070800 1 2 3 4 5y - EulerY - RKy
+h = 1h = 0,5Gráficas representativas
+--- PAGE 103 ---
+Queda como tarea la resolución del problema 9 del práctico, después compartimos los resultados!!

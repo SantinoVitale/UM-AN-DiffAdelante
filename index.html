@@ -1,12 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UM - AN - Diferencia Hacia Adelante</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 </head>
 <body>
-  <h1 class="rainbow-title">El EPICO PROYECTO DEL DUO DINAMICO</h1>
+  <div class="container">
+    <h1 class="rainbow-title">El EPICO PROYECTO DEL DUO DINAMICO</h1>
+    <p class="subtitle">Diferencias hacia adelante</p>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="function">Función f(x)</button>
+      <button class="tab" data-tab="manual">Puntos manuales</button>
+    </div>
+
+    <div class="panel active" data-panel="function">
+      <div class="row">
+        <label>f(x) = <input type="text" id="fn-expr" placeholder="exp(x) + x" style="width: 16rem;"></label>
+      </div>
+      <div class="row">
+        <label>x₀ <input type="number" id="fn-x0" step="any" value="0.5" style="width: 6rem;"></label>
+        <label>h <input type="number" id="fn-h" step="any" value="0.01" style="width: 6rem;"></label>
+        <label>n
+          <select id="fn-n">
+            <option>1</option><option>2</option><option>3</option><option selected>4</option>
+          </select>
+        </label>
+        <label>N <input type="number" id="fn-N" min="2" step="1" value="5" style="width: 6rem;"></label>
+      </div>
+      <div class="row">
+        <button id="fn-calc">Calcular</button>
+        <button class="ghost" id="fn-load-p5">Cargar ejemplo Problema 5</button>
+      </div>
+    </div>
+
+    <div class="panel" data-panel="manual">
+      <div class="row">
+        <label>x₀ <input type="number" id="mn-x0" step="any" value="0" style="width: 6rem;"></label>
+        <label>h <input type="number" id="mn-h" step="any" value="0.006" style="width: 6rem;"></label>
+        <label>n
+          <select id="mn-n">
+            <option>1</option><option>2</option><option>3</option><option selected>4</option>
+          </select>
+        </label>
+      </div>
+      <div id="manual-y-list"></div>
+      <div class="row">
+        <button class="ghost" id="mn-add-row">+ fila</button>
+        <button class="ghost" id="mn-remove-row">– fila</button>
+      </div>
+      <div class="row">
+        <button id="mn-calc">Calcular</button>
+        <button class="ghost" id="mn-load-p4">Cargar ejemplo Problema 4</button>
+      </div>
+    </div>
+
+    <div id="error-banner" class="error-banner hidden"></div>
+
+    <div class="results">
+      <h2>Resultados</h2>
+      <div id="formula"></div>
+      <div>φ'(x₀) = <span id="phi-prime" class="big-num"></span></div>
+      <div id="analytic-block" class="hidden">
+        <div>f'(x₀) = <span id="f-prime"></span></div>
+        <div id="err-pct"></div>
+      </div>
+      <div id="diff-table"></div>
+      <div id="chart-wrap" class="hidden">
+        <canvas id="chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,247 @@
+
+--- PAGE 1 ---
+Diferencias hacia adelante
+Ahora bien, se dispone de un conjunto de puntos (x i, yi)
+que se suponen parte de una función continua, f C [a, b]
+y por lo tanto derivable.
+Consideramos que es la función de interpolación de f:
+f (xi) = (xi) ( xi  [a, b] y x i+1 – x i = h )
+f (x) = (x) + (x)
+Necesitamos que todos los puntos estén a la misma distancia, eso
+siempre es posible …
+--- PAGE 2 ---
+ Derivar a (x) respecto de x: ´ (x)
+ Aplicar la derivada en el punto x 0 : ´ (x0)
+ Teniendo en cuenta que x i - x 0 = i . H
+(todos los puntos a la misma distancia!!!)
+El desarrollo para llegar a la fórmula correspondiente requiere que
+realicemos los siguientes pasos, luego trabajaremos para determinar el error
+del método.
+Considerando que buscamos la derivada de la función, resulta que:
+Si f (x) = (x) + (x)
+Entonces: f’ (x) = ’ (x) + ’ (x)
+Derivada
+aproximada
+Error del
+método
+--- PAGE 3 ---
+Consideramos al polinomio de interpolación de Newton
+diferencias no divididas:
+Derivamos este polinomio:
+  
+ )( )+ …
+)( ) )
+--- PAGE 4 ---
+  
+ )( )+ …
+)( ) )
+--- PAGE 5 ---
+Aplicamos la derivada a x 0
+Se anula
+Se anulan
+
+--- PAGE 6 ---
+Descartando los términos nulos resulta entonces:
+-h -h … -(n-1)h
+h
+1
+
+
+
+         ) (1) 1 ( ... ) (3
+1) (2
+1) ( 0
+1
+0
+3
+0
+2
+0 x fnx f x fx f n n
+´ (x0) =
+Fórmula en diferencias hacia adelante para calcular la derivada
+de una función en un punto x 0 .
+
+--- PAGE 7 ---
+Error del método de “Diferencias hacia adelante”
+Habíamos iniciado el desarrollo con esta expresión
+Si f (x) = (x) + (x)
+Entonces: f’ (x) = ’ (x) + ’ (x)
+Derivada
+aproximada
+Error del
+método
+Ya desarrollamos la fórmula para la derivada aproximada, ahora trabajamos
+con el error del método, partiendo del error de interpolación:
+ (x) = (x – x 0) (x – x 1) ... (x – x n) siendo  (x0, xn)
+)! 1 (
+) (1
+
+
+n
+f n 
+--- PAGE 8 ---
+El procedimiento es similar, primero derivamos la expresión del
+error respecto de x , luego aplicamos a x 0
+ (x 0, xn)´(x 0) = (-1) n hn
+) 1 (
+) (1
+
+
+n
+f n 
+ (x) = (x – x 0) (x – x 1) ... (x – x n) siendo  (x0, xn)
+)! 1 (
+) (1
+
+
+n
+f n 
+Se anulan al aplicar en xoCada uno es –i.h al aplicar en
+xo, sería n con signo veces h
+Error del método de diferencias hacia adelante.
+--- PAGE 9 ---
+Problema 4. Se mide la velocidad (m/s) del aire que fluye sobre
+una superficie plana a distintas distancias y (m) de la superficie,
+determine el esfuerzo contante  (N/m2) en la superficie para
+y = 0, si se sabe que:
+Suponga un valor de viscosidad dinámico  = 1,8.10-5 N.s/m2
+Los datos obtenidos experimentalmente se muestran a
+continuación:
+Trabajamos con el práctico:
+y (m) 0 0,002 0,006 0,012 0,018 0,024
+v (m/s) 0 0,287 0,899 1,915 3,048 4,299
+--- PAGE 10 ---
+Un dato que necesito para aplicar la fórmula es h, distancia entre los puntos,
+la cual debe ser constante.
+Buscamos la derivada primera en y = 0
+        
+y (m) 0 0,002 0,006 0,012 0,018 0,024
+v (m/s) 0 0,287 0,899 1,915 3,048 4,299
+Hay un punto que debemos descartar y construir la tabla de diferencias.
+--- PAGE 11 ---
+y (m) v (m/s)  f(x) 2f(x) 3f(x) 4f(x)
+0 0
+0,006 0,899 0,899
+0,012 1,915 1,016 0,117
+0,018 3,048 1,133 0,117 0
+0,024 4,299 1,251 0,118 0,001 0,001
+Calculamos las diferencias en una tabla:
+Aplicamos la ecuación correspondiente:
+       
+140,041667
+x0
+x1
+x2
+x3
+x4
+x f(x)
+--- PAGE 12 ---
+Calculamos el esfuerzo:
+ = 1,8.10-5 N.s/m2
+Entonces reemplazamos: 1,8.10−5 140,041667
+140,041667 s
+= 2,52.  
+Es muy importante verificar que los puntos estén a igual
+distancia!!!
+--- PAGE 13 ---
+Fórmula en diferencias hacia adelante para calcular
+derivadas de orden superior
+El procedimiento sería similar al realizado.
+Debemos considerar la derivada primera del polinomio de interpolación y
+volver a derivarlo tantas veces como se requiera, para luego aplicarlo en
+el punto xo.
+
+--- PAGE 14 ---
+Diferencias centradas
+POR TAYLOR xi+1 – x i = h
+f (x) = f (x 0) + h h 2 h3 ... + h n! 1
+) ´(0x f !2
+) (0x fII
+! 3
+) (0x fIII
+!
+) (0
+n
+x fn
+Siempre sería posible truncar la serie y obtener fórmulas a partir de T aylor para
+calculo de derivadas en un punto.
+Como se busca un mayor nivel de precisión es posible a partir de la fórmula de
+T aylor obtener las fórmulas en diferencias finitas centradas, vemos cómo sería
+el desarrollo analítico.
+--- PAGE 15 ---
+Partiendo de la fórmula de T aylor que acabamos de recordar y
+teniendo en cuenta que x k - x 0 = k . h
+Reemplazamos a k por los valores 1 y -1
+Restamos m. a m. ambas expresiones:
+--- PAGE 16 ---
+Restando m. a m. ambas expresiones y truncando la serie:
+Despejamos la derivada primera:
+Derivada aproximada Error
+Fórmula de diferencias finitas centradas para la
+derivada primera en dos puntos
+--- PAGE 17 ---
+Sumando m. a m. ambas expresiones y truncando la serie:
+Despejamos la derivada segunda:
+Derivada segunda aproximada
+Fórmula de diferencias finitas centradas para la derivada segunda
+en dos puntos
+--- PAGE 18 ---
+Del mismo modo se pueden realizar combinaciones lineales con
+la fórmula de T aylor para obtener otras fórmulas de diferencias
+finitas centradas con más cantidad de puntos, al extender la
+expresión de T aylor a más puntos se consideran con mayor nivel
+de precisión, vemos algunas a modo de ejemplo:
+Derivadas primera y segunda en cuatro puntos
+--- PAGE 19 ---
+Problema 5. El objetivo de este problema es comparar las
+aproximaciones obtenidas al derivar por diferencias centradas en
+2 y 4 puntos, diferencias hacia delante y el cálculo analítico para
+la siguiente función.
+Trabaje con un valor de h = 0,01 y determine la derivada de la
+función en x = 0,5.
+Compare los resultados obtenidos a través del error relativo
+porcentual y concluya al respecto.
+Vamos a aplicar en primer lugar diferencias centradas.
+Trabajamos con el práctico:
+--- PAGE 20 ---
+ h = 0,01 x = 0,5
+Generamos una tabla en cuatro puntos, usamos dos y luego los cuatro
+centrados en x = 0,5.
+0,48 0,49 0,5 0,51 0,52
+2,131696 2,174456 2,218282 2,263195 2,309217
+Aplicamos fórmula en dos puntos:
+
+Aplicamos fórmula en cuatro puntos:
+x-2h x-h x x+h x+2h
+
+x
+f(x)
+--- PAGE 21 ---
+Aplicamos ahora la fórmula de diferencias hacia adelante:
+x f(x)  f(x) 2f(x) 3f(x) 4f(x)
+0,5 2,218282
+0,51 2,263195 0,0449129
+0,52 2,309217 0,0460223 0,0011093
+0,53 2,356371 0,0471540 0,0011317 0,0000224
+0,54 2,404680 0,0483086 0,0011546 0,0000229 0,0000005
+Generamos la tabla de diferencias:
+Aplicamos la fórmula:
+
+       
+x0
+x1
+x2
+x3
+x4
+ h = 0,01 x = 0,5
+--- PAGE 22 ---
+Fórmula en dos puntos: 
+Fórmula en cuatro puntos: 
+Diferencias hacia adelante: 
+Cálculo directo: 
+Errores relativos porcentuales:
+E% (2ptos) = -0,00816949 %
+E% (4ptos) = 6,53578E-07 %
+E%(Adel)= 4,05445E-06 %
+Conclusión?
+
