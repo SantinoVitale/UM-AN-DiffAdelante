@@ -12,6 +12,43 @@
 
 ---
 
+## Protocolo de Verificación (REGLA OBLIGATORIA)
+
+**Regla:** Entre cada Task, el agente DEBE alcanzar **≥95% de confianza** de que lo implementado está correcto antes de avanzar a la siguiente Task. No vale pedirle al usuario que verifique visualmente — la verificación la hace el agente con las herramientas a su alcance. Si no se llega al 95%, **detenerse**, reportar la duda concreta al usuario y esperar instrucciones.
+
+**Métodos de verificación que el agente debe usar (en orden de preferencia):**
+
+1. **Lectura cruzada de código** — leer el archivo recién escrito y los archivos que interactúan con él (ej. después de crear `main.js`, verificar que todos los `import` matchean `export`s reales, que todos los `getElementById('...')` matchean IDs en `index.html`, etc).
+
+2. **Ejecución headless de funciones puras** — usar Node.js vía Bash para correr los módulos puros (`calc.js`, `expr.js`) con los inputs del PDF y comparar con los outputs esperados numéricamente. Ejemplo:
+   ```bash
+   node --input-type=module -e "import('./js/calc.js').then(m => console.log(m.forwardDerivativeAtX0(...)))"
+   ```
+
+3. **Captura de pantalla del browser** — cuando la verificación requiere DOM/render visual (tabs, KaTeX, tabla, banner de error), el agente debe pedirle al usuario que abra la página en Live Server y luego capturar el screen con PowerShell:
+   ```powershell
+   Add-Type -AssemblyName System.Windows.Forms,System.Drawing
+   $b = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+   $bmp = New-Object System.Drawing.Bitmap $b.Width, $b.Height
+   $g = [System.Drawing.Graphics]::FromImage($bmp)
+   $g.CopyFromScreen($b.Location, [System.Drawing.Point]::Empty, $b.Size)
+   $bmp.Save("$PWD\verify\step.png")
+   ```
+   Después leer la imagen con la tool `Read` y confirmar visualmente que el output coincide con lo esperado en el plan.
+
+4. **Grep de consistencia** — para chequeos rápidos tipo "todos los IDs usados en JS existen en HTML", "todos los exports de un módulo se importan donde corresponde".
+
+**Cuándo aplica:**
+- Al final del último Step de cada Task, antes de marcar la Task como ✅.
+- Cualquier paso del plan que diga "Verificación" o "Esperado" debe ejecutarse efectivamente, no asumirse.
+
+**Si el agente no llega al 95%:**
+- Reportar al usuario qué falta verificar, qué herramienta usaría, y por qué la confianza es baja.
+- No marcar la Task como completa ni pasar a la siguiente.
+- No commitear hasta resolverlo.
+
+---
+
 ## File Structure
 
 | Archivo | Responsabilidad | Estado |
