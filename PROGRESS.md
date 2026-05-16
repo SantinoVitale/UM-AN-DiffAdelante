@@ -17,8 +17,8 @@ Plan maestro de 9 tasks con código verificado, ejemplos del PDF y tests inline:
 | 4 | `expr.js` — parseExpr (math.js), buildPointsFromFunction + verif. consola | ✅ | `js/expr.js` |
 | 5 | `ui.js` — DOM helpers, tabs, validación, render tabla/KaTeX, ejemplos precargables | ✅ | `js/ui.js` |
 | 6 | `main.js` wiring + borrar `js/index.js` + verif. Problemas 4/5 (sin chart) | ✅ | `js/main.js` |
-| **7** | **`plot.js` — Chart.js curva + scatter de puntos + tangente** | ⏳ **PRÓXIMO** | `js/plot.js` |
-| 8 | Pulido CSS (animaciones, responsive, scrollbar) | ⏳ | `css/style.css` |
+| 7 | `plot.js` — Chart.js curva + scatter de puntos + tangente | ✅ | `js/plot.js` |
+| **8** | **Pulido CSS (animaciones, responsive, scrollbar)** | ⏳ **PRÓXIMO** | `css/style.css` |
 | 9 | Verificación end-to-end con los dos ejemplos del PDF | ⏳ | — |
 
 ## Cómo retomar tras `/clear`
@@ -36,6 +36,9 @@ Plan maestro de 9 tasks con código verificado, ejemplos del PDF y tests inline:
   - P5 error case: banner rojo "f(x) vacía" tras Calcular con campo vacío ✅
   - P5 success: φ'(x₀)=2.64872, f'(x₀)=2.64872, error=1.266e-7%, KaTeX, tabla Δ ✅
   - P4 manual: tab switch ok, 5 filas y₀..y₄, φ'(x₀)=140.042, sin f'(x₀) ni error% ✅
+- **Task 7** — Chart.js renderizado (capturas `verify/task7-*.png`):
+  - P5 modo función: curva cyan + 5 puntos violetas + tangente rosa punteada ✅
+  - P4 modo manual: chart ocultado correctamente ✅
 
 ## Convenciones del proyecto
 

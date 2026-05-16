@@ -7,6 +7,7 @@ import {
   renderDiffTable, renderFormulaKaTeX, renderResultsNumbers,
   loadExampleProblema4, loadExampleProblema5,
 } from './ui.js';
+import { renderPlot, destroyPlot } from './plot.js';
 
 function calculate() {
   clearError();
@@ -59,7 +60,13 @@ function calculate() {
   }
   renderResultsNumbers({ approx, analytic, errPct, method });
 
-  document.getElementById('chart-wrap').classList.add('hidden');
+  if (mode === 'function' && expr) {
+    renderPlot('chart', expr, xs, x0, approx);
+    document.getElementById('chart-wrap').classList.remove('hidden');
+  } else {
+    destroyPlot();
+    document.getElementById('chart-wrap').classList.add('hidden');
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
