@@ -31,7 +31,7 @@ function calculate() {
       xs = ys.map((_, i) => x0 + i * h);
     }
   } catch (e) {
-    showError(`Error armando puntos: ${e.message}`);
+    showError(e.message);
     return;
   }
 
@@ -67,6 +67,11 @@ function calculate() {
     destroyPlot();
     document.getElementById('chart-wrap').classList.add('hidden');
   }
+
+  const results = document.querySelector('.results');
+  results.classList.remove('fade-in');
+  void results.offsetWidth;
+  results.classList.add('fade-in');
 }
 
 window.addEventListener('DOMContentLoaded', () => {

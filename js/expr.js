@@ -2,7 +2,12 @@
 
 export function parseExpr(fStr) {
   if (!fStr || !fStr.trim()) throw new Error("expresión vacía");
-  const node = math.parse(fStr);
+  let node;
+  try {
+    node = math.parse(fStr);
+  } catch (e) {
+    throw new Error(`Expresión inválida: ${e.message}`);
+  }
   const fCompiled = node.compile();
 
   let dCompiled = null;
@@ -15,16 +20,23 @@ export function parseExpr(fStr) {
 
   return {
     eval(x) {
-      const v = fCompiled.evaluate({ x });
+      let v;
+      try {
+        v = fCompiled.evaluate({ x });
+      } catch (e) {
+        throw new Error(`Expresión inválida: ${e.message}`);
+      }
       if (typeof v !== 'number' || !Number.isFinite(v)) {
-        throw new Error(`f(${x}) = ${v} (no finito)`);
+        throw new Error(`f no definida en x = ${x}`);
       }
       return v;
     },
     derivEval(x) {
       if (dCompiled) {
-        const v = dCompiled.evaluate({ x });
-        if (Number.isFinite(v)) return { value: v, method: 'symbolic' };
+        try {
+          const v = dCompiled.evaluate({ x });
+          if (Number.isFinite(v)) return { value: v, method: 'symbolic' };
+        } catch (_) { /* fall through to numeric */ }
       }
       const hh = 1e-6;
       const v = (fCompiled.evaluate({ x: x + hh }) - fCompiled.evaluate({ x: x - hh })) / (2 * hh);
