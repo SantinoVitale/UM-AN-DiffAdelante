@@ -1,84 +1,122 @@
-import { buildDiffTable, forwardDerivativeAtX0, relativeErrorPct } from './calc.js';
-import { buildPointsFromFunction } from './expr.js';
+// Entrada: wiring consola ↔ worker ↔ análisis numérico ↔ render.
+
+import { algorithms } from "./algorithms.js";
+import { buildDiffTable, forwardDerivativeAtX0, relativeErrorPct, classifyComplexity } from "./diff.js";
 import {
-  setupTabs, setupManualRows,
-  showError, clearError,
-  readInputs, validate,
-  renderDiffTable, renderFormulaKaTeX, renderResultsNumbers,
-  loadExampleProblema4, loadExampleProblema5,
-} from './ui.js';
-import { renderPlot, destroyPlot } from './plot.js';
+  renderAlgoCards,
+  markActiveAlgo,
+  fillParams,
+  readParams,
+  setRunning,
+  setProgress,
+  showError,
+  clearError,
+  renderHeroFormula,
+  setupTableTabs,
+  renderResults,
+} from "./ui.js";
+import { renderCostChart, renderDerivChart } from "./plot.js";
 
-function calculate() {
-  clearError();
+let selectedId = "bubbleSort";
+let worker = null;
 
-  const inputs = readInputs();
-  const { ok, errors } = validate(inputs);
-  if (!ok) {
-    showError(errors.join(' | '));
-    return;
+// φ'(nᵢ) en cada fila i de la tabla, usando los términos disponibles (máx. 4)
+function forwardDerivativeAtRow(table, h, i, maxTerms) {
+  let sum = 0;
+  for (let k = 1; k <= maxTerms; k++) {
+    const sign = k % 2 === 1 ? 1 : -1;
+    sum += (sign * table[k][i]) / k;
   }
-
-  const { mode, x0, h, n } = inputs;
-  let xs, ys, expr = null;
-
-  try {
-    if (mode === 'function') {
-      const r = buildPointsFromFunction(inputs.fStr, x0, h, inputs.N);
-      xs = r.xs; ys = r.ys; expr = r.expr;
-    } else {
-      ys = inputs.ysManual;
-      xs = ys.map((_, i) => x0 + i * h);
-    }
-  } catch (e) {
-    showError(e.message);
-    return;
-  }
-
-  let table, approx;
-  try {
-    table = buildDiffTable(ys);
-    approx = forwardDerivativeAtX0(table, h, n);
-  } catch (e) {
-    showError(e.message);
-    return;
-  }
-
-  renderFormulaKaTeX(n);
-  renderDiffTable(table, xs);
-
-  let analytic = null, errPct = null, method = null;
-  if (mode === 'function' && expr) {
-    try {
-      const d = expr.derivEval(x0);
-      analytic = d.value;
-      method = d.method;
-      errPct = relativeErrorPct(approx, analytic);
-    } catch (e) {
-      analytic = null;
-    }
-  }
-  renderResultsNumbers({ approx, analytic, errPct, method });
-
-  if (mode === 'function' && expr) {
-    renderPlot('chart', expr, xs, x0, approx);
-    document.getElementById('chart-wrap').classList.remove('hidden');
-  } else {
-    destroyPlot();
-    document.getElementById('chart-wrap').classList.add('hidden');
-  }
-
-  const results = document.querySelector('.results');
-  results.classList.remove('fade-in');
-  void results.offsetWidth;
-  results.classList.add('fade-in');
+  return sum / h;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  setupTabs();
-  setupManualRows();
-  document.getElementById('fn-calc').addEventListener('click', calculate);
-  document.getElementById('mn-calc').addEventListener('click', calculate);
-  document.getElementById('fn-load-p5').addEventListener('click', loadExampleProblema5);
-  document.getElementById('mn-load-p4').addEventListener('click', loadExampleProblema4);
-});
+function analyze(algo, { ns, ops, timesMs }) {
+  const h = ns[1] - ns[0];
+  const tableOps = buildDiffTable(ops);
+  const tableTime = buildDiffTable(timesMs);
+  const clsOps = classifyComplexity(ns, ops);
+  const clsTime = classifyComplexity(ns, timesMs, { tol: 0.25 });
+
+  const nTerms = Math.min(4, ns.length - 1);
+  const est = forwardDerivativeAtX0(tableOps, h, nTerms);
+  const model = algo.modelDerivative(ns[0]);
+  const deriv = {
+    n0: ns[0],
+    h,
+    terms: Array.from({ length: nTerms }, (_, i) => tableOps[i + 1][0]),
+    est,
+    model,
+    errPct: relativeErrorPct(est, model),
+  };
+
+  // curva de derivada estimada por punto (hasta el penúltimo)
+  const derivNs = ns.slice(0, -1);
+  const derivEst = derivNs.map((_, i) =>
+    forwardDerivativeAtRow(tableOps, h, i, Math.min(4, ns.length - 1 - i))
+  );
+  const derivModel = derivNs.map((n) => algo.modelDerivative(n));
+
+  return { algo, ns, ops, timesMs, h, tableOps, tableTime, clsOps, clsTime, deriv, derivNs, derivEst, derivModel };
+}
+
+function onBenchmarkDone(result) {
+  setRunning(false);
+  const algo = algorithms[selectedId];
+  try {
+    const state = analyze(algo, result);
+    renderResults(state);
+    renderCostChart(document.getElementById("chart-cost"), state.ns, state.ops, state.timesMs, algo.opsLabel);
+    renderDerivChart(document.getElementById("chart-deriv"), state.derivNs, state.derivEst, state.derivModel);
+  } catch (err) {
+    showError(err.message);
+  }
+}
+
+function run() {
+  clearError();
+  let params;
+  try {
+    params = readParams();
+  } catch (err) {
+    showError(err.message);
+    return;
+  }
+
+  if (worker) worker.terminate();
+  worker = new Worker(new URL("./worker.js", import.meta.url), { type: "module" });
+  worker.onmessage = (e) => {
+    const msg = e.data;
+    if (msg.type === "progress") setProgress(msg);
+    else if (msg.type === "done") onBenchmarkDone(msg.result);
+    else if (msg.type === "error") {
+      setRunning(false);
+      showError(msg.message);
+    }
+  };
+  worker.onerror = (e) => {
+    setRunning(false);
+    showError(`Error en el worker: ${e.message || "ver consola"}`);
+  };
+
+  setRunning(true);
+  worker.postMessage({ algoId: selectedId, params });
+}
+
+function init() {
+  renderHeroFormula();
+  renderAlgoCards(algorithms, (id) => {
+    selectedId = id;
+    fillParams(algorithms[id].defaults);
+    clearError();
+  });
+  markActiveAlgo(selectedId);
+  fillParams(algorithms[selectedId].defaults);
+  setupTableTabs();
+  document.getElementById("btn-run").addEventListener("click", run);
+  document.getElementById("btn-defaults").addEventListener("click", () => {
+    fillParams(algorithms[selectedId].defaults);
+    clearError();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", init);

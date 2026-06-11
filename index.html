@@ -3,80 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UM - AN - Diferencia Hacia Adelante</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Δ⁺ LAB — Complejidad de algoritmos por diferencias hacia adelante</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230c0f0d'/%3E%3Ctext x='8' y='13' font-size='13' text-anchor='middle' fill='%236dffb0' font-family='monospace'%3EΔ%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1 class="rainbow-title">El EPICO PROYECTO DEL DUO DINAMICO</h1>
-    <p class="subtitle">Diferencias hacia adelante</p>
+  <div class="scanlines" aria-hidden="true"></div>
 
-    <div class="tabs">
-      <button class="tab active" data-tab="function">Función f(x)</button>
-      <button class="tab" data-tab="manual">Puntos manuales</button>
+  <header class="masthead">
+    <div class="masthead-id">
+      <span class="badge">UM · ANÁLISIS NUMÉRICO</span>
+      <span class="badge badge-dim">INSTRUMENTO Δ⁺ / v1.0</span>
     </div>
+    <h1 class="title">Δ⁺ LAB<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="subtitle">Estimación empírica de la complejidad de algoritmos<br>
+      por <strong>diferencias hacia adelante</strong></p>
+    <div class="masthead-formula" id="hero-formula" aria-label="fórmula de diferencias hacia adelante"></div>
+  </header>
 
-    <div class="panel active" data-panel="function">
-      <div class="row">
-        <label>f(x) = <input type="text" id="fn-expr" placeholder="exp(x) + x" style="width: 16rem;"></label>
-      </div>
-      <div class="row">
-        <label>x₀ <input type="number" id="fn-x0" step="any" value="0.5" style="width: 6rem;"></label>
-        <label>h <input type="number" id="fn-h" step="any" value="0.01" style="width: 6rem;"></label>
-        <label>n
-          <select id="fn-n">
-            <option>1</option><option>2</option><option>3</option><option selected>4</option>
-          </select>
-        </label>
-        <label>N <input type="number" id="fn-N" min="2" step="1" value="5" style="width: 6rem;"></label>
-      </div>
-      <div class="row">
-        <button id="fn-calc">Calcular</button>
-        <button class="ghost" id="fn-load-p5">Cargar ejemplo Problema 5</button>
-      </div>
-    </div>
+  <main class="bench">
+    <!-- ============ CONSOLA ============ -->
+    <section class="console panel" aria-labelledby="console-title">
+      <h2 id="console-title" class="panel-title">01 · CONSOLA DE MEDICIÓN</h2>
 
-    <div class="panel" data-panel="manual">
-      <div class="row">
-        <label>x₀ <input type="number" id="mn-x0" step="any" value="0" style="width: 6rem;"></label>
-        <label>h <input type="number" id="mn-h" step="any" value="0.006" style="width: 6rem;"></label>
-        <label>n
-          <select id="mn-n">
-            <option>1</option><option>2</option><option>3</option><option selected>4</option>
-          </select>
-        </label>
-      </div>
-      <div id="manual-y-list"></div>
-      <div class="row">
-        <button class="ghost" id="mn-add-row">+ fila</button>
-        <button class="ghost" id="mn-remove-row">– fila</button>
-      </div>
-      <div class="row">
-        <button id="mn-calc">Calcular</button>
-        <button class="ghost" id="mn-load-p4">Cargar ejemplo Problema 4</button>
-      </div>
-    </div>
+      <fieldset class="algo-picker">
+        <legend>Algoritmo bajo prueba</legend>
+        <div id="algo-cards" class="algo-cards"></div>
+      </fieldset>
 
-    <div id="error-banner" class="error-banner hidden"></div>
+      <fieldset class="params">
+        <legend>Tamaños equiespaciados <span class="hint">nᵢ = n₀ + i·h &nbsp;(requisito del método)</span></legend>
+        <div class="param-grid">
+          <label>n₀ <input type="number" id="p-n0" min="1" step="1"></label>
+          <label>h <input type="number" id="p-h" min="1" step="1"></label>
+          <label>N puntos <input type="number" id="p-N" min="5" max="12" step="1"></label>
+          <label>repeticiones <input type="number" id="p-reps" min="1" max="31" step="1"></label>
+        </div>
+        <button type="button" class="ghost" id="btn-defaults">↺ valores sugeridos</button>
+      </fieldset>
 
-    <div class="results">
-      <h2>Resultados</h2>
-      <div id="formula"></div>
-      <div>φ'(x₀) = <span id="phi-prime" class="big-num"></span></div>
-      <div id="analytic-block" class="hidden">
-        <div>f'(x₀) = <span id="f-prime"></span></div>
-        <div id="err-pct"></div>
+      <button type="button" id="btn-run" class="run-btn">
+        <span class="run-label">EJECUTAR BENCHMARK</span>
+        <span class="run-sub" id="run-sub">worker en espera</span>
+      </button>
+
+      <div id="progress" class="progress hidden" role="status">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <span class="progress-text mono" id="progress-text"></span>
       </div>
-      <div id="diff-table"></div>
-      <div id="chart-wrap" class="hidden">
-        <canvas id="chart"></canvas>
+
+      <div id="error-banner" class="error-banner hidden" role="alert"></div>
+
+      <aside class="method-note">
+        <h3>¿Por qué diferencias hacia adelante?</h3>
+        <p>El costo T(n) de un algoritmo no tiene fórmula analítica: solo se lo puede
+        <em>muestrear</em>. El benchmark genera puntos equiespaciados por construcción
+        — exactamente lo que exige el método — y la tabla Δᵏ revela el grado:
+        si T es polinomial de grado k, <span class="mono ok">Δᵏ es constante</span> y
+        <span class="mono ok">Δᵏ⁺¹ ≈ 0</span>. El error del método es
+        <span class="mono">ε'(n₀) = (−1)ⁿhⁿ·f⁽ⁿ⁺¹⁾(ξ)/(n+1)</span>; en la métrica de
+        tiempo, el ruido de medición se amplifica en las columnas altas de la tabla.</p>
+      </aside>
+    </section>
+
+    <!-- ============ RESULTADOS ============ -->
+    <section class="results" id="results" aria-live="polite">
+      <div class="results-empty" id="results-empty">
+        <div class="results-empty-art mono" aria-hidden="true">Δ&nbsp;Δ²&nbsp;Δ³&nbsp;Δ⁴</div>
+        <p>Sin mediciones todavía.<br>Configurá la consola y ejecutá el benchmark.</p>
       </div>
-    </div>
-  </div>
+
+      <div id="results-body" class="hidden">
+
+        <div class="verdict panel reveal" id="verdict-card">
+          <h2 class="panel-title">02 · VEREDICTO</h2>
+          <div class="verdict-main">
+            <span class="verdict-bigo mono" id="verdict-bigo">—</span>
+            <span class="verdict-match" id="verdict-match"></span>
+          </div>
+          <p class="verdict-why" id="verdict-why"></p>
+          <p class="verdict-time" id="verdict-time"></p>
+        </div>
+
+        <div class="deriv panel reveal" id="deriv-card">
+          <h2 class="panel-title">03 · DERIVADA EN n₀ <span class="tag-ops">ops</span></h2>
+          <div class="deriv-formula" id="deriv-formula"></div>
+          <div class="deriv-numbers">
+            <div class="stat">
+              <span class="stat-label">φ'(n₀) estimada</span>
+              <span class="stat-value mono ok" id="deriv-est">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label" id="deriv-model-label">modelo teórico</span>
+              <span class="stat-value mono" id="deriv-model">—</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">error relativo</span>
+              <span class="stat-value mono" id="deriv-err">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tables panel reveal">
+          <h2 class="panel-title">04 · TABLAS DE DIFERENCIAS</h2>
+          <div class="table-tabs" role="tablist">
+            <button class="table-tab active" id="tab-ops" role="tab">⬡ operaciones <span class="tag-ops">determinista</span></button>
+            <button class="table-tab" id="tab-time" role="tab">◷ tiempo (ms) <span class="tag-time">con ruido</span></button>
+          </div>
+          <div class="table-scroll">
+            <table class="diff-table mono" id="diff-table"></table>
+          </div>
+          <p class="table-footnote" id="table-footnote"></p>
+        </div>
+
+        <div class="charts panel reveal">
+          <h2 class="panel-title">05 · CURVAS</h2>
+          <div class="chart-block">
+            <h3>T(n) medido — <span class="ok">operaciones</span> vs <span class="warn">tiempo</span></h3>
+            <canvas id="chart-cost" height="230"></canvas>
+          </div>
+          <div class="chart-block">
+            <h3>Tasa de crecimiento — φ'(nᵢ) estimada vs derivada del modelo</h3>
+            <canvas id="chart-deriv" height="230"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <span class="mono">Δ⁺ LAB</span> · Diferenciación hacia adelante aplicada a la informática ·
+    Análisis Numérico, Universidad de Mendoza · teoría en <span class="mono">docs/teoria.md</span>
+  </footer>
 
   <script type="module" src="js/main.js"></script>
 </body>

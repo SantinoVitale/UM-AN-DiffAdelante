@@ -1,76 +1,105 @@
-// Chart viene como global desde el CDN
+// Wrappers de Chart.js (global `Chart` desde CDN). Tema del instrumento.
 
-let chartInstance = null;
+const OPS = "#6dffb0";
+const TIME = "#ffb454";
+const INK_DIM = "#97a48a";
+const GRID = "rgba(109, 255, 176, 0.08)";
+const FONT = { family: "'IBM Plex Mono', monospace", size: 10 };
 
-export function destroyPlot() {
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
-  }
+let costChart = null;
+let derivChart = null;
+
+function axis(title, color = INK_DIM) {
+  return {
+    title: { display: true, text: title, color, font: FONT },
+    ticks: { color, font: FONT },
+    grid: { color: GRID },
+  };
 }
 
-export function renderPlot(canvasId, expr, xs, x0, slopeAtX0) {
-  destroyPlot();
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext('2d');
+const commonOpts = {
+  responsive: true,
+  animation: { duration: 400 },
+  plugins: {
+    legend: { labels: { color: INK_DIM, font: FONT, boxWidth: 14 } },
+    tooltip: { titleFont: FONT, bodyFont: FONT },
+  },
+};
 
-  const step = xs[1] - xs[0];
-  const xMin = xs[0] - step;
-  const xMax = xs[xs.length - 1] + step;
-  const N_CURVE = 200;
-
-  const curve = [];
-  for (let i = 0; i < N_CURVE; i++) {
-    const x = xMin + (xMax - xMin) * i / (N_CURVE - 1);
-    try {
-      curve.push({ x, y: expr.eval(x) });
-    } catch (_) { /* skip puntos no definidos */ }
-  }
-
-  const pointsData = xs.map(x => ({ x, y: expr.eval(x) }));
-  const y0 = expr.eval(x0);
-  const tangent = [
-    { x: xMin, y: y0 + slopeAtX0 * (xMin - x0) },
-    { x: xMax, y: y0 + slopeAtX0 * (xMax - x0) },
-  ];
-
-  chartInstance = new Chart(ctx, {
-    type: 'line',
+export function renderCostChart(canvas, ns, ops, timesMs, opsLabel) {
+  if (costChart) costChart.destroy();
+  costChart = new Chart(canvas, {
+    type: "line",
     data: {
+      labels: ns,
       datasets: [
         {
-          label: 'f(x)',
-          data: curve,
-          borderColor: '#22d3ee',
-          backgroundColor: 'transparent',
-          pointRadius: 0,
-          borderWidth: 2,
+          label: `operaciones (${opsLabel})`,
+          data: ops,
+          borderColor: OPS,
+          backgroundColor: OPS,
+          pointRadius: 4,
+          pointStyle: "rectRot",
+          tension: 0.25,
+          yAxisID: "y",
         },
         {
-          label: 'puntos',
-          data: pointsData,
-          type: 'scatter',
-          backgroundColor: '#a78bfa',
-          pointRadius: 6,
+          label: "tiempo (ms, mediana)",
+          data: timesMs,
+          borderColor: TIME,
+          backgroundColor: TIME,
+          pointRadius: 4,
+          pointStyle: "circle",
+          borderDash: [6, 4],
+          tension: 0.25,
+          yAxisID: "y2",
         },
-        {
-          label: `tangente x₀=${x0}`,
-          data: tangent,
-          borderColor: '#f472b6',
-          borderDash: [5, 5],
-          pointRadius: 0,
-          borderWidth: 1.5,
-        },
-      ]
+      ],
     },
     options: {
+      ...commonOpts,
       scales: {
-        x: { type: 'linear', grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+        x: axis("n (tamaño del problema)"),
+        y: { ...axis("operaciones", OPS), position: "left" },
+        y2: { ...axis("ms", TIME), position: "right", grid: { drawOnChartArea: false } },
       },
-      plugins: { legend: { labels: { color: '#cbd5e1' } } },
-      responsive: true,
-      maintainAspectRatio: false,
-    }
+    },
+  });
+}
+
+export function renderDerivChart(canvas, ns, estimated, model) {
+  if (derivChart) derivChart.destroy();
+  derivChart = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels: ns,
+      datasets: [
+        {
+          label: "φ'(nᵢ) por diferencias hacia adelante",
+          data: estimated,
+          borderColor: OPS,
+          backgroundColor: OPS,
+          pointRadius: 5,
+          pointStyle: "rectRot",
+          showLine: false,
+        },
+        {
+          label: "derivada del modelo teórico",
+          data: model,
+          borderColor: INK_DIM,
+          backgroundColor: INK_DIM,
+          pointRadius: 0,
+          borderDash: [2, 3],
+          tension: 0.25,
+        },
+      ],
+    },
+    options: {
+      ...commonOpts,
+      scales: {
+        x: axis("n"),
+        y: axis("dT/dn (ops por unidad de n)"),
+      },
+    },
   });
 }

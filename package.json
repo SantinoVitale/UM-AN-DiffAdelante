@@ -1,0 +1,10 @@
+{
+  "name": "um-an-diffadelante",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Analizador de complejidad de algoritmos por diferencias hacia adelante (Análisis Numérico, UM)",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
