@@ -1,10 +1,10 @@
 // Wrappers de Chart.js (global `Chart` desde CDN). Tema del instrumento.
 
-const OPS = "#6dffb0";
-const TIME = "#ffb454";
-const INK_DIM = "#97a48a";
-const GRID = "rgba(109, 255, 176, 0.08)";
-const FONT = { family: "'IBM Plex Mono', monospace", size: 10 };
+const OPS = "#0000ff";   // azul: métrica determinista (operaciones)
+const TIME = "#ff0000";  // rojo: métrica ruidosa (tiempo)
+const INK_DIM = "#000000";
+const GRID = "#808080";
+const FONT = { family: "'Courier New', Courier, monospace", size: 11, weight: "bold" };
 
 let costChart = null;
 let derivChart = null;

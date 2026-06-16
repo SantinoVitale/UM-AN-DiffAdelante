@@ -5,32 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Δ⁺ LAB — Complejidad de algoritmos por diferencias hacia adelante</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230c0f0d'/%3E%3Ctext x='8' y='13' font-size='13' text-anchor='middle' fill='%236dffb0' font-family='monospace'%3EΔ%3C/text%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.5/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
+  <div class="marquee-bar" role="marquee" aria-label="anuncios">
+    <div class="marquee-track" aria-hidden="true">
+      <span class="marquee-c1">★ BIENVENIDO AL Δ⁺ LAB ★</span>
+      <span class="marquee-c2">¡EL MEJOR ANALIZADOR DE COMPLEJIDAD DE LA WEB!</span>
+      <span class="marquee-c3">◆ DIFERENCIAS HACIA ADELANTE ◆</span>
+      <span class="marquee-c4">UNIVERSIDAD DE MENDOZA · ANÁLISIS NUMÉRICO</span>
+      <span class="marquee-c1">★ ¡EJECUTÁ TU PRIMER BENCHMARK HOY! ★</span>
+      <span class="marquee-c2">Δ Δ² Δ³ Δ⁴ ⟶ O(?)</span>
+    </div>
+  </div>
 
   <header class="masthead">
+    <div class="window-titlebar">
+      <span>Δ⁺ LAB.EXE — Analizador de complejidad</span>
+      <span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span>
+    </div>
     <div class="masthead-id">
       <span class="badge">UM · ANÁLISIS NUMÉRICO</span>
       <span class="badge badge-dim">INSTRUMENTO Δ⁺ / v1.0</span>
+      <span class="badge-new">¡NEW!</span>
     </div>
-    <h1 class="title">Δ⁺ LAB<span class="cursor" aria-hidden="true"></span></h1>
+    <h1 class="title rainbow">Δ⁺ LAB<span class="cursor" aria-hidden="true"></span></h1>
     <p class="subtitle">Estimación empírica de la complejidad de algoritmos<br>
       por <strong>diferencias hacia adelante</strong></p>
     <div class="masthead-formula" id="hero-formula" aria-label="fórmula de diferencias hacia adelante"></div>
+    <div class="color-squares" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b></div>
   </header>
 
   <main class="bench">
     <!-- ============ CONSOLA ============ -->
     <section class="console panel" aria-labelledby="console-title">
-      <h2 id="console-title" class="panel-title">01 · CONSOLA DE MEDICIÓN</h2>
+      <h2 id="console-title" class="panel-title">01 · CONSOLA DE MEDICIÓN<span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span></h2>
 
       <fieldset class="algo-picker">
         <legend>Algoritmo bajo prueba</legend>
@@ -47,6 +59,8 @@
         </div>
         <button type="button" class="ghost" id="btn-defaults">↺ valores sugeridos</button>
       </fieldset>
+
+      <div class="construction-stripe" aria-hidden="true"><span>🚧 ZONA DE PRUEBAS 🚧</span></div>
 
       <button type="button" id="btn-run" class="run-btn">
         <span class="run-label">EJECUTAR BENCHMARK</span>
@@ -82,7 +96,7 @@
       <div id="results-body" class="hidden">
 
         <div class="verdict panel reveal" id="verdict-card">
-          <h2 class="panel-title">02 · VEREDICTO</h2>
+          <h2 class="panel-title">02 · VEREDICTO<span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span></h2>
           <div class="verdict-main">
             <span class="verdict-bigo mono" id="verdict-bigo">—</span>
             <span class="verdict-match" id="verdict-match"></span>
@@ -92,7 +106,7 @@
         </div>
 
         <div class="deriv panel reveal" id="deriv-card">
-          <h2 class="panel-title">03 · DERIVADA EN n₀ <span class="tag-ops">ops</span></h2>
+          <h2 class="panel-title">03 · DERIVADA EN n₀ <span class="tag-ops">ops</span><span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span></h2>
           <div class="deriv-formula" id="deriv-formula"></div>
           <div class="deriv-numbers">
             <div class="stat">
@@ -111,7 +125,7 @@
         </div>
 
         <div class="tables panel reveal">
-          <h2 class="panel-title">04 · TABLAS DE DIFERENCIAS</h2>
+          <h2 class="panel-title">04 · TABLAS DE DIFERENCIAS<span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span></h2>
           <div class="table-tabs" role="tablist">
             <button class="table-tab active" id="tab-ops" role="tab">⬡ operaciones <span class="tag-ops">determinista</span></button>
             <button class="table-tab" id="tab-time" role="tab">◷ tiempo (ms) <span class="tag-time">con ruido</span></button>
@@ -123,7 +137,7 @@
         </div>
 
         <div class="charts panel reveal">
-          <h2 class="panel-title">05 · CURVAS</h2>
+          <h2 class="panel-title">05 · CURVAS<span class="window-controls" aria-hidden="true"><i>_</i><i>□</i><i>✕</i></span></h2>
           <div class="chart-block">
             <h3>T(n) medido — <span class="ok">operaciones</span> vs <span class="warn">tiempo</span></h3>
             <canvas id="chart-cost" height="230"></canvas>
@@ -138,9 +152,14 @@
     </section>
   </main>
 
+  <div class="hit-counter">
+    <span class="hit-counter-screen"><span class="lbl">VISITANTES:</span> 0001997 &nbsp;|&nbsp; <span class="lbl">EN LÍNEA DESDE</span> 1995</span>
+  </div>
+
   <footer class="colophon">
     <span class="mono">Δ⁺ LAB</span> · Diferenciación hacia adelante aplicada a la informática ·
-    Análisis Numérico, Universidad de Mendoza · teoría en <span class="mono">docs/teoria.md</span>
+    Análisis Numérico, Universidad de Mendoza · teoría en
+    <a href="docs/teoria.md" class="mono">docs/teoria.md</a>
   </footer>
 
   <script type="module" src="js/main.js"></script>
